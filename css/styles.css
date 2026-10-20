@@ -1,0 +1,30 @@
+/* Base tokens. Full responsive styling follows the initial scaffold commit. */
+:root {
+  color-scheme: dark;
+  --color-background: #06251e;
+  --color-text: #f8f5e9;
+  --color-accent: #efc66a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--color-background);
+  color: var(--color-text);
+  font-family: system-ui, sans-serif;
+  line-height: 1.5;
+}
+
+main {
+  max-width: 70rem;
+  margin-inline: auto;
+  padding: 2rem;
+}
+
+a {
+  color: var(--color-accent);
+}
+
