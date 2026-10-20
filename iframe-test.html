@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="robots" content="noindex"/>
+    <meta name="theme-color" content="#020c07"/>
+    <title>DM FIRST — Iframe Compatibility Test</title>
+    <link rel="icon" type="image/svg+xml" href="./assets/images/favicon.svg"/>
+    <link rel="stylesheet" href="./css/styles.css"/>
+    <link rel="stylesheet" href="./css/deposit.css"/>
+    <link rel="stylesheet" href="./css/deposit-widget.css"/>
+    <link rel="stylesheet" href="./css/iframe-test.css"/>
+    <script type="module" src="./js/iframe-experiment.js"></script>
+</head>
+<body class="iframe-test-page">
+<header class="iframe-toolbar">
+    <div><a class="wordmark" href="./?preview=1">DM FIRST</a>
+        <p>IFRAME COMPATIBILITY TEST</p></div>
+    <nav aria-label="Embedding test controls">
+        <button type="button" data-reset-frame>Reload registration</button>
+        <button type="button" class="iframe-popup-button" data-show-popup>Show ₹500 popup</button>
+        <a data-open-direct href="https://www.dmfirst0.com/#/register?invitationCode=93458117528" target="_blank"
+           rel="noopener noreferrer">Open registration directly ↗</a>
+    </nav>
+</header>
+<main class="iframe-test-main">
+    <section class="iframe-test-notes" aria-labelledby="iframe-test-title">
+        <div class="iframe-test-summary">
+            <h1 id="iframe-test-title">Can registration run underneath our popup?</h1>
+            <p id="iframe-test-status" role="status">Requesting DmFirst registration. Check the content below; embedding
+                has not been verified.</p>
+        </div>
+        <details>
+            <summary>How to test</summary>
+            <ol>
+                <li>Check that the actual DmFirst registration form is visible below.</li>
+                <li>Select Show ₹500 popup, close it, and reopen it using the circular widget.</li>
+                <li>If you register, check that login and the dashboard work inside this frame. Registration is not
+                    required just to inspect the layout.
+                </li>
+                <li>Claim requests wallet recharge inside the same frame. Check that the wallet appears and the widget
+                    remains available.
+                </li>
+                <li>If the frame is blank, refuses to connect, or sign-in fails, use Open directly. A load event alone
+                    does not prove the embedded site works.
+                </li>
+            </ol>
+            <p>This experiment does not read the embedded page, detect registration, collect credentials, or bypass
+                browser restrictions. The normal landing-page journey is unchanged.</p>
+        </details>
+    </section>
+    <div class="iframe-container">
+        <iframe id="dmfirst-frame" title="DmFirst registration — embedding compatibility test"
+                src="https://www.dmfirst0.com/#/register?invitationCode=93458117528"
+                referrerpolicy="strict-origin-when-cross-origin"></iframe>
+    </div>
+</main>
+<button class="deposit-widget" type="button" data-deposit-widget hidden aria-label="Reopen minimum deposit details"
+        aria-controls="deposit-dialog" aria-haspopup="dialog"><span aria-hidden="true">₹</span><small>DETAILS</small>
+</button>
+<noscript><p class="iframe-noscript">Popup controls require JavaScript. The registration frame and Open directly link
+    remain available.</p></noscript>
+<dialog class="deposit-dialog" id="deposit-dialog" aria-labelledby="deposit-title"
+        aria-describedby="deposit-description deposit-action-note">
+    <div class="deposit-corners" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+    <header class="deposit-header">
+        <span><i></i> DM FIRST <span class="deposit-header-slash">/</span> WALLET ACCESS</span>
+        <button class="deposit-close" type="button" aria-label="Close deposit details" data-dismiss-deposit>
+            <svg viewBox="0 0 20 20" aria-hidden="true">
+                <path d="m5 5 10 10M15 5 5 15"/>
+            </svg>
+        </button>
+    </header>
+    <div class="deposit-art" aria-hidden="true">
+        <span class="deposit-art-coordinate">RECHARGE / 01</span>
+        <svg class="deposit-orbit" viewBox="0 0 144 144">
+            <circle class="deposit-orbit-outer" cx="72" cy="72" r="62"/>
+            <circle class="deposit-orbit-ticks" cx="72" cy="72" r="55"/>
+            <path class="deposit-orbit-arc" d="M72 10a62 62 0 0 1 60 47M72 134a62 62 0 0 1-60-47"/>
+            <path class="deposit-wallet-back" d="m46 56 41-12 6 15"/>
+            <rect class="deposit-wallet-body" x="39" y="55" width="67" height="43" rx="7"/>
+            <path class="deposit-wallet-flap" d="M93 68h17v18H93a9 9 0 0 1 0-18Z"/>
+            <circle class="deposit-wallet-dot" cx="95" cy="77" r="2"/>
+            <path class="deposit-wallet-line" d="M49 87h18"/>
+            <path class="deposit-orbit-crosses" d="M72 3v12m0 114v12M3 72h12m114 0h12"/>
+        </svg>
+        <span class="deposit-art-caption">YOUR NEXT MOVE</span>
+    </div>
+    <h2 id="deposit-title" class="deposit-title" tabindex="-1" data-deposit-heading>Minimum deposit</h2>
+    <p class="deposit-amount" data-deposit-amount>₹500</p>
+    <p class="deposit-currency" data-deposit-currency>INDIAN RUPEES · INR</p>
+    <div class="deposit-description" id="deposit-description">
+        <p>Deposit a minimum of <strong data-deposit-amount>₹500</strong> on DmFirst.</p>
+        <p>Your next step is wallet recharge.</p>
+    </div>
+    <div class="deposit-detail-strip"><span>DESTINATION</span><span><i></i> DMFIRST WALLET <span
+            aria-hidden="true">↗</span></span></div>
+    <a class="deposit-claim" data-deposit-claim href="https://www.dmfirst0.com/#/wallet/Recharge"><span>Claim</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M5 12h14m-6-6 6 6-6 6"/>
+        </svg>
+    </a>
+    <p class="deposit-action-note" id="deposit-action-note">Opens wallet recharge on DmFirst.<br/>No payment is made on
+        this page.</p>
+    <footer class="deposit-footer"><span><span data-deposit-minimum-label>₹500 MINIMUM</span> <span
+            aria-hidden="true">/</span> <span
+            data-deposit-currency-code>INR</span></span><span>18+ · PLAY RESPONSIBLY</span></footer>
+</dialog>
+</body>
+</html>

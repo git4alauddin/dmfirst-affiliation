@@ -1,0 +1,15 @@
+{
+  "name": "dm-first-aff",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Animated DmFirst affiliate registration portal",
+  "scripts": {
+    "start": "node tools/serve.mjs",
+    "test": "node --test",
+    "check": "node --check js/main.js && node --check js/animations.js && node --check js/config.js && node --check js/registration.js && node --check js/registration-flow.js && node --check js/activity-ticker.js && node --check js/activity-content.js && node --check js/deposit-widget.js && node --check js/deposit-prompt.js && node --check js/deposit-preview.js && node --check js/iframe-experiment.js && node --check tools/serve.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

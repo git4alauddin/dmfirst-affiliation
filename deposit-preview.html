@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="theme-color" content="#020c07"/>
+    <meta name="robots" content="noindex"/>
+    <title>DM FIRST — Deposit Popup Preview</title>
+    <link rel="icon" type="image/svg+xml" href="./assets/images/favicon.svg"/>
+    <link rel="stylesheet" href="./css/styles.css"/>
+    <link rel="stylesheet" href="./css/deposit.css"/>
+    <script type="module" src="./js/deposit-preview.js"></script>
+</head>
+<body class="deposit-preview-page">
+<div class="ambient-light" aria-hidden="true"></div>
+<div class="screen-texture" aria-hidden="true"></div>
+<main class="wallet-preview-shell">
+    <header class="wallet-preview-header">
+        <a class="wordmark" href="./?preview=1">
+            <svg class="brand-mark" viewBox="0 0 30 30" aria-hidden="true">
+                <path d="M5 3h11l9 9v15H14L5 18Z"/>
+                <path d="m10 9 10 10M10 19V9h10"/>
+            </svg>
+            <span>DM FIRST<span class="wordmark-caption">WALLET ACCESS</span></span>
+        </a>
+        <span class="wallet-preview-badge">POPUP PREVIEW</span>
+    </header>
+    <section class="wallet-preview-content" aria-labelledby="wallet-preview-title">
+        <p class="wallet-eyebrow">YOUR NEXT STEP / 02</p>
+        <h1 id="wallet-preview-title">Continue to<br/><span>your wallet.</span></h1>
+        <p>View the minimum deposit, then continue to wallet recharge on DmFirst.</p>
+        <button type="button" class="wallet-preview-open" data-open-deposit>View deposit details <span
+                aria-hidden="true">↗</span></button>
+        <a class="wallet-preview-back" href="./?preview=1">← Back to access portal preview</a>
+    </section>
+    <p class="wallet-preview-caption">Design preview · Claim opens the real DmFirst wallet recharge page.</p>
+</main>
+
+<dialog class="deposit-dialog" id="deposit-dialog" aria-labelledby="deposit-title"
+        aria-describedby="deposit-description deposit-action-note">
+    <div class="deposit-corners" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+    <header class="deposit-header">
+        <span><i></i> DM FIRST <span class="deposit-header-slash">/</span> WALLET ACCESS</span>
+        <button class="deposit-close" type="button" aria-label="Close deposit details" data-dismiss-deposit>
+            <svg viewBox="0 0 20 20" aria-hidden="true">
+                <path d="m5 5 10 10M15 5 5 15"/>
+            </svg>
+        </button>
+    </header>
+    <div class="deposit-art" aria-hidden="true">
+        <span class="deposit-art-coordinate">RECHARGE / 01</span>
+        <svg class="deposit-orbit" viewBox="0 0 144 144">
+            <circle class="deposit-orbit-outer" cx="72" cy="72" r="62"/>
+            <circle class="deposit-orbit-ticks" cx="72" cy="72" r="55"/>
+            <path class="deposit-orbit-arc" d="M72 10a62 62 0 0 1 60 47M72 134a62 62 0 0 1-60-47"/>
+            <path class="deposit-wallet-back" d="m46 56 41-12 6 15"/>
+            <rect class="deposit-wallet-body" x="39" y="55" width="67" height="43" rx="7"/>
+            <path class="deposit-wallet-flap" d="M93 68h17v18H93a9 9 0 0 1 0-18Z"/>
+            <circle class="deposit-wallet-dot" cx="95" cy="77" r="2"/>
+            <path class="deposit-wallet-line" d="M49 87h18"/>
+            <path class="deposit-orbit-crosses" d="M72 3v12m0 114v12M3 72h12m114 0h12"/>
+        </svg>
+        <span class="deposit-art-caption">YOUR NEXT MOVE</span>
+    </div>
+    <h2 id="deposit-title" class="deposit-title" tabindex="-1" data-deposit-heading>Minimum deposit</h2>
+    <p class="deposit-amount" data-deposit-amount>₹500</p>
+    <p class="deposit-currency" data-deposit-currency>INDIAN RUPEES · INR</p>
+    <div class="deposit-description" id="deposit-description">
+        <p>Deposit a minimum of <strong data-deposit-amount>₹500</strong> on DmFirst.</p>
+        <p>Your next step is wallet recharge.</p>
+    </div>
+    <div class="deposit-detail-strip"><span>DESTINATION</span><span><i></i> DMFIRST WALLET <span
+            aria-hidden="true">↗</span></span></div>
+    <a class="deposit-claim" data-deposit-claim href="https://www.dmfirst0.com/#/wallet/Recharge"><span>Claim</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M5 12h14m-6-6 6 6-6 6"/>
+        </svg>
+    </a>
+    <p class="deposit-action-note" id="deposit-action-note">Opens wallet recharge on DmFirst.<br/>No payment is made on
+        this page.</p>
+    <footer class="deposit-footer"><span><span data-deposit-minimum-label>₹500 MINIMUM</span> <span
+            aria-hidden="true">/</span> <span
+            data-deposit-currency-code>INR</span></span><span>18+ · PLAY RESPONSIBLY</span></footer>
+</dialog>
+<noscript><p class="deposit-noscript">Minimum deposit: ₹500 (INR). <a href="https://www.dmfirst0.com/#/wallet/Recharge">Claim
+    — open DmFirst wallet recharge ↗</a></p></noscript>
+</body>
+</html>
