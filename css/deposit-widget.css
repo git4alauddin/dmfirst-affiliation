@@ -12,11 +12,9 @@
     border: 1px solid #a2ffb5;
     border-radius: 50%;
     background: radial-gradient(circle at 35% 20%, #205f33, #062514 70%);
-    box-shadow: 0 0 0 5px #63ff880d, 0 0 24px #5fff8229;
     color: #b9ffca;
     cursor: pointer;
-    animation: deposit-widget-glow 3.6s ease-in-out infinite,
-    deposit-widget-nudge 4.5s ease-in-out .5s infinite;
+    animation: deposit-widget-nudge 4.5s ease-in-out .5s infinite;
 }
 
 .deposit-widget > span {
@@ -35,7 +33,7 @@
 }
 
 .deposit-widget:hover {
-    box-shadow: 0 0 0 5px #63ff8820, 0 0 30px #5fff8244;
+    border-color: #d2ffdf;
 }
 
 .deposit-widget:hover, .deposit-widget:focus-visible {
@@ -48,27 +46,18 @@
     outline-offset: 5px;
 }
 
-@keyframes deposit-widget-glow {
-    0%, 100% {
-        box-shadow: 0 0 0 5px #63ff880d, 0 0 24px #5fff8229;
-    }
-    50% {
-        box-shadow: 0 0 0 8px #63ff8818, 0 0 32px #5fff824a;
-    }
-}
-
 @keyframes deposit-widget-nudge {
     0%, 76%, 90%, 100% {
         transform: translateY(0);
     }
     80% {
-        transform: translateY(-8px);
+        transform: translateY(-12px);
     }
     84% {
         transform: translateY(0);
     }
     87% {
-        transform: translateY(-3px);
+        transform: translateY(-4px);
     }
 }
 
@@ -81,7 +70,6 @@
     border: 1px solid #9bffb5;
     background: #0a2b17;
     color: #c2ffcf;
-    box-shadow: 0 0 30px #60ff8450;
     font-family: "Segoe UI", sans-serif;
     font-size: 28px;
 }

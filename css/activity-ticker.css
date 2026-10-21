@@ -3,12 +3,15 @@
     --activity-transition-duration: 360ms;
     position: relative;
     display: grid;
-    grid-template-columns: 34px 30px minmax(0, 1fr) auto;
+    grid-template-columns: 36px minmax(0, 1fr) auto;
+    width: fit-content;
+    max-width: 100%;
+    justify-self: center;
     align-items: center;
     gap: 9px;
     min-width: 0;
-    min-height: 68px;
-    padding: 12px;
+    min-height: 60px;
+    padding: 9px 10px;
     overflow: hidden;
     border: 1px solid #539749;
     border-radius: 22px 10px 22px 10px;
@@ -27,86 +30,84 @@
     pointer-events: none;
 }
 
-.activity-badge {
-    display: grid;
-    place-items: center;
-    min-height: 31px;
-    border: 1px solid #caff98;
-    border-radius: 8px 3px 8px 3px;
-    background: linear-gradient(135deg, #edffd7, #8ceb54);
-    box-shadow: 0 0 15px #a6ff5020;
-    color: #153b0c;
-    font-family: "Arial Black", "Segoe UI", sans-serif;
-    font-size: 8px;
-    font-weight: 800;
-    letter-spacing: .2px;
-}
-
 .activity-avatar {
     display: grid;
     place-items: center;
-    width: 30px;
-    height: 30px;
+    width: 36px;
+    height: 36px;
+    overflow: hidden;
     border: 1px solid #73d987;
     border-radius: 50%;
     background: radial-gradient(circle at 30% 20%, #2f633a, #0c2511 70%);
-    color: #d3ffdc;
-    font-family: "Segoe UI", sans-serif;
-    font-size: 15px;
-    font-weight: 600;
+    color: #438261;
     box-shadow: 0 0 10px #6eff740c;
+}
+
+.activity-avatar svg {
+    width: 100%;
+    height: 100%;
 }
 
 .activity-copy {
     min-width: 0;
 }
 
-.activity-mode {
+.activity-heading {
     display: flex;
     align-items: center;
     gap: 5px;
-    margin: 0 0 4px;
-    color: #70ded4;
-    font-size: 7px;
-    line-height: 1.2;
-    font-weight: 700;
-    letter-spacing: 1px;
-    white-space: nowrap;
-}
-
-.activity-mode > i {
-    flex: 0 0 4px;
-    width: 4px;
-    height: 4px;
-    border-radius: 50%;
-    background: var(--activity-accent);
-    box-shadow: 0 0 7px #8dff8e77;
-}
-
-.activity-message {
-    display: flex;
-    align-items: baseline;
-    flex-wrap: wrap;
-    column-gap: 5px;
     min-width: 0;
     line-height: 1.3;
 }
 
-.activity-message strong {
+.activity-brand {
+    flex: 0 0 auto;
+    padding: 2px 4px;
+    border: 1px solid #e5bd58;
+    border-radius: 3px;
+    background: linear-gradient(135deg, #fff0b5, #e5bd58 60%, #c8942f);
+    color: #3d2b09;
+    box-shadow: inset 0 1px 0 #fff8dd88, 0 0 8px #e5bd5826;
+    font-size: 7px;
+    font-weight: 700;
+    letter-spacing: .5px;
+}
+
+.activity-heading strong {
     min-width: 0;
     overflow: hidden;
     color: #effff0;
     font-family: "Segoe UI", sans-serif;
     font-size: 12px;
-    font-weight: 650;
+    font-weight: 700;
     white-space: nowrap;
     text-overflow: ellipsis;
 }
 
-.activity-message > span {
+.activity-user {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 3px 0 0;
     color: #83ac8b;
-    font-size: 8px;
+    font-size: 10px;
+    line-height: 1.4;
+}
+
+.activity-user [data-activity-primary] {
+    min-width: 0;
+    overflow: hidden;
     white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.activity-sample {
+    flex: 0 0 auto;
+    font-size: 8px;
+}
+
+.activity-sample::before {
+    content: "\00b7 ";
 }
 
 .activity-value {
@@ -119,27 +120,6 @@
     text-shadow: 0 0 13px #8dff5c22;
     white-space: nowrap;
     font-variant-numeric: tabular-nums;
-}
-
-.activity-ticker[data-value-kind="label"] .activity-value {
-    font-family: inherit;
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: .3px;
-}
-
-.activity-ticker[data-kind="claim"] {
-    --activity-accent: #e9ee89;
-    border-color: #6e934b;
-}
-
-.activity-ticker[data-kind="claim"] .activity-avatar {
-    border-color: #7bd8c0;
-    background: radial-gradient(circle at 30% 20%, #245846, #08291d 70%);
-}
-
-.activity-ticker[data-mode="demo"] .activity-badge {
-    background: linear-gradient(135deg, #f4ffd9, #c9ee75);
 }
 
 .activity-ticker:focus-visible {
@@ -190,49 +170,28 @@
 
 @media (max-width: 600px) {
     .activity-ticker {
-        grid-template-columns: 29px 26px minmax(0, 1fr) auto;
-        gap: 7px;
-        min-height: 61px;
-        padding: 11px 10px;
+        grid-template-columns: 32px minmax(0, 1fr) auto;
+        gap: 8px;
+        min-height: 58px;
+        padding: 8px 9px;
         border-radius: 19px 8px 19px 8px;
     }
 
-    .activity-badge {
-        min-height: 29px;
-        font-size: 6px;
-    }
-
     .activity-avatar {
-        width: 26px;
-        height: 26px;
-        font-size: 13px;
+        width: 32px;
+        height: 32px;
     }
 
-    .activity-mode {
-        font-size: 6px;
-        letter-spacing: .6px;
-        margin-bottom: 3px;
+    .activity-heading strong {
+        font-size: 11px;
     }
 
-    .activity-message {
-        display: grid;
-        gap: 1px;
-    }
-
-    .activity-message strong {
-        font-size: 10px;
-    }
-
-    .activity-message > span {
-        font-size: 7px;
+    .activity-user {
+        font-size: 9px;
     }
 
     .activity-value {
         font-size: 18px;
-    }
-
-    .activity-ticker[data-value-kind="label"] .activity-value {
-        font-size: 8px;
     }
 
 }

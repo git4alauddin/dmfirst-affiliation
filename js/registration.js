@@ -2,8 +2,7 @@ import {mountRegistrationFlow} from "./registration-flow.js";
 import {mountActivityTicker} from "./activity-ticker.js";
 
 const flow = mountRegistrationFlow(document);
-const demoActivity = new URLSearchParams(window.location.search).get("activity") === "demo";
-const ticker = mountActivityTicker(document.querySelector("[data-activity-ticker]"), {demo: demoActivity});
+const ticker = mountActivityTicker(document.querySelector("[data-activity-ticker]"));
 window.addEventListener("pagehide", () => {
     flow.destroy();
     ticker.destroy();

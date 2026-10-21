@@ -16,7 +16,6 @@ export function schedulePromotion(delayMs, callback) {
 export function mountRegistrationFlow(page, settings = config, schedule = schedulePromotion) {
     const frame = page.querySelector("#dmfirst-frame");
     const direct = page.querySelector("[data-open-direct]");
-    const label = page.querySelector("[data-page-label]");
     const dialog = page.querySelector("#deposit-dialog");
     const widget = page.querySelector("[data-deposit-widget]");
     const details = page.querySelector("[data-show-deposit]");
@@ -45,7 +44,6 @@ export function mountRegistrationFlow(page, settings = config, schedule = schedu
         frame.src = settings.depositUrl;
         frame.title = "DmFirst wallet recharge";
         direct.href = settings.depositUrl;
-        label.textContent = "Wallet recharge";
     }
 
     details.addEventListener("click", showDetails);

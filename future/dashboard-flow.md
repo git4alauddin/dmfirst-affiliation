@@ -20,6 +20,11 @@ The previous two-tab registration/return screens and local session-confirmation
 logic have been removed. Visitors do not need to return to our landing page or
 select I've registered.
 
+On phones and short landscape screens, the landing page keeps the lock, title,
+and progress bar together before the access strip and console. Artwork scales
+with viewport height, and supporting panels use tighter spacing. Small screens
+can still scroll to the lower panels; the three-second sequence is unchanged.
+
 ## Trigger and navigation rules
 
 The popup delay starts when the wrapper's JavaScript initializes and pauses while
@@ -66,29 +71,35 @@ claims require supporting content before they are added.
 - Native dialog handles modal focus and Escape dismissal.
 
 The circular control is labeled as deposit details rather than live support.
-While visible, it has a soft 3.6-second glow pulse and a bounce every 4.5 seconds,
-rising 8 px with a smaller 3 px follow-up hop. Hover or keyboard focus stops both effects, and reduced
-motion disables them. Opening the popup hides the control as before; the
+While visible, it bounces every 4.5 seconds without a glow,
+rising 12 px with a smaller 4 px follow-up hop. Hover or keyboard focus stops the bounce, and reduced
+motion disables it. Opening the popup hides the control as before; the
 attention effects do not reopen the popup or change its destination.
 
 ## Registration top-bar ticker
 
 The header contains a neon-green capsule inspired by the supplied reference,
-with an original layout: badge, circular initials/symbol avatar, persistent mode
-label, message, and highlighted value. There is no pause button or loading bar.
+with a circular profile illustration, a two-line user/message block, and a
+right-aligned highlighted value. Category badges, separate category icons, and
+section headings are omitted. All three activity types use the same green styling.
+The small brand badge reads DmFirst. The capsule sizes to its content with
+tighter gaps and padding, rather than stretching to a 460-pixel width.
 The entire capsule slides in from the right and fades into view, stays visible,
 then moves left and fades away before the next capsule appears.
 The default 4000 ms active-time cycle has
 a 360 ms entrance, a readable hold, a 360 ms exit, and a 240 ms empty interval.
 Its header space stays reserved throughout so the iframe does not jump.
 
-Normal visits use QUICK GUIDE and rotate factual information about the referral,
-configured minimum deposit, wallet recharge, and deposit details. No user activity
-or completed payments are inferred from this information.
-
-The explicit registration.html?activity=demo preview displays masked fictional
-names and varied deposit/claim amounts. Each capsule includes DEMO and DEMO
-ACTIVITY labels whenever it is visible; accessible text also identifies the examples as fictional.
+All visits rotate Deposit, Withdrawal, and Win entries, with masked fictional
+user IDs and varied amounts. The category appears in bold above the smaller masked user identifier, with
+only the currency amount on the right. A small Sample
+label sits beside the identifier; accessible text also identifies the examples as
+fictional. The profile avatar is an original SVG illustration.
+Sample amounts are randomized in 500-rupee steps: deposits range from 500 to
+2,000 INR, withdrawals from 30,000 to 70,000 INR, and wins from 10,000 to
+30,000 INR, including both endpoints.
+Amounts refresh when the rotation starts another loop and stay fixed while a
+notification is visible or paused.
 There is no genuine activity source connected. Real transaction social proof
 would need an authorized source before replacing these preview examples.
 
@@ -124,7 +135,7 @@ Run or restart npm start manually to pick up the registration.html route.
 - Full sequence: http://127.0.0.1:4173/
 - Landing preview, with automatic navigation paused: http://127.0.0.1:4173/?preview=1
 - Wrapper directly: http://127.0.0.1:4173/registration.html
-- Fictional ticker preview: http://127.0.0.1:4173/registration.html?activity=demo
+- Fictional ticker preview: http://127.0.0.1:4173/registration.html
 - Popup visual preview: http://127.0.0.1:4173/deposit-preview.html
 - Separate diagnostic experiment: http://127.0.0.1:4173/iframe-test.html
 

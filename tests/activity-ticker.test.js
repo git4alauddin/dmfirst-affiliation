@@ -7,7 +7,7 @@ import {config} from "../js/config.js";
 
 const html = await readFile(new URL("../registration.html", import.meta.url), "utf8");
 
-function fixture({demo = false, reduced = false} = {}) {
+function fixture({reduced = false, random = () => 0} = {}) {
     const page = new EventTarget();
     page.hidden = false;
     const motion = new EventTarget();
@@ -47,7 +47,7 @@ function fixture({demo = false, reduced = false} = {}) {
     };
     root.querySelector = (selector) => nodes.get(selector.slice(1, -1));
     root.contains = (node) => [...nodes.values()].includes(node);
-    const ticker = mountActivityTicker(root, {demo, settings: {...config, activityIntervalMs: 1000}});
+    const ticker = mountActivityTicker(root, {settings: {...config, activityIntervalMs: 1000}, random});
     return {
         root, page, motion, frames, ticker,
         node: (name) => nodes.get(`data-activity-${name}`),
@@ -66,43 +66,102 @@ function dispatch(target, type, properties = {}) {
     target.dispatchEvent(Object.assign(new Event(type), properties));
 }
 
-test("public messages use configured guidance; transactions require explicit demo mode", () => {
-    const guide = getActivityItems({settings: {...config, minimumDeposit: 900}});
-    assert.equal(guide[0].value, "₹900");
-    assert.ok(guide.every((item) => item.kind === "info"));
-    assert.ok(guide.every((item) => !/deposited|claimed|\*\*\*/i.test(`${item.primary} ${item.secondary}`)));
-    const demo = getActivityItems({demo: true});
-    assert.ok(demo.every((item) => item.badge === "DEMO"));
-    assert.ok(new Set(demo.map((item) => item.value)).size > 1);
-    assert.ok(new Set(demo.map((item) => item.primary)).size > 1);
-    assert.ok(demo.some((item) => item.kind === "claim"));
+test("activity uses deposit, withdrawal, and win with masked IDs and currency amounts", () => {
+    const items = getActivityItems({random: () => 0});
+    assert.deepEqual([...new Set(items.map((item) => item.kind))], ["deposit", "withdrawal", "win"]);
+    assert.deepEqual([...new Set(items.map((item) => item.secondary))], ["Deposit", "Withdrawal", "Win"]);
+    assert.ok(new Set(items.map((item) => item.value)).size > 1);
+    assert.ok(new Set(items.map((item) => item.primary)).size > 1);
+    assert.ok(items.every((item) => /^\*{4}\d{2}$/.test(item.primary)));
+    assert.ok(items.every((item) => /^₹[\d,]+$/.test(item.value)));
 });
 
-test("ticker rotates actual wrapper bindings while retaining visible demo disclosure", () => {
-    const state = fixture({demo: true});
-    assert.equal(state.node("mode").textContent, "DEMO ACTIVITY");
+test("sample amounts include both range endpoints and only use 500-rupee steps", () => {
+    const reachable = {deposit: new Set(), withdrawal: new Set(), win: new Set()};
+    const ranges = {deposit: [500, 2000], withdrawal: [30000, 70000], win: [10000, 30000]};
+    for (let sample = 0; sample <= 100; sample++) {
+        const items = getActivityItems({random: () => sample / 101});
+        for (const item of items) {
+            const [minimum, maximum] = ranges[item.kind];
+            assert.ok(item.amount >= minimum && item.amount <= maximum);
+            assert.equal(item.amount % 500, 0);
+            reachable[item.kind].add(item.amount);
+        }
+    }
+    assert.deepEqual([...reachable.deposit], [500, 1000, 1500, 2000]);
+    assert.deepEqual([...reachable.withdrawal], Array.from({length: 81}, (_, index) => 30000 + index * 500));
+    assert.deepEqual([...reachable.win], Array.from({length: 41}, (_, index) => 10000 + index * 500));
+});
+
+test("each new rotation samples fresh amounts and pausing keeps the displayed amount stable", () => {
+    let calls = 0;
+    const state = fixture({random: () => calls++ < 6 ? 0 : 0.999999});
+    assert.equal(state.node("value").textContent, "₹500");
+    dispatch(state.root, "pointerenter", {pointerType: "mouse"});
+    state.tick(50);
+    assert.equal(calls, 6);
+    assert.equal(state.node("value").textContent, "₹500");
+    dispatch(state.root, "pointerleave");
+    state.tick(61);
+    assert.equal(state.node("primary").textContent, "****21");
+    assert.equal(state.node("value").textContent, "₹2,000");
+    assert.equal(state.node("sample").hidden, false);
+    state.tick(10);
+    assert.equal(state.node("secondary").textContent, "Withdrawal");
+    assert.equal(state.node("value").textContent, "₹70,000");
+    state.tick(10);
+    assert.equal(state.node("secondary").textContent, "Win");
+    assert.equal(state.node("value").textContent, "₹30,000");
+    state.ticker.destroy();
+});
+
+test("ticker rotates actual wrapper bindings while retaining branding and visible sample disclosure", () => {
+    const state = fixture();
+    assert.equal(state.node("brand").textContent, "DmFirst");
+    assert.equal(state.node("sample").textContent, "Sample");
+    assert.equal(state.node("sample").hidden, false);
+    assert.equal(state.node("secondary").textContent, "Deposit");
+    assert.equal(state.node("value").textContent, "₹500");
     assert.match(state.node("note").textContent, /fictional/);
-    assert.equal(state.node("primary").textContent, "R***21");
+    assert.equal(state.node("primary").textContent, "****21");
     state.tick(9);
     assert.equal(state.root.dataset.phase, "exiting");
     state.tick();
     assert.equal(state.root.dataset.phase, "away");
-    assert.equal(state.node("primary").textContent, "R***21", "the old entry leaves before its replacement arrives");
+    assert.equal(state.node("primary").textContent, "****21", "the old entry leaves before its replacement arrives");
     state.tick();
     assert.equal(state.root.dataset.phase, "entering");
-    assert.equal(state.node("primary").textContent, "A***08");
-    assert.equal(state.node("badge").textContent, "DEMO");
-    assert.equal(state.node("mode").textContent, "DEMO ACTIVITY");
+    assert.equal(state.node("primary").textContent, "****08");
+    assert.equal(state.node("secondary").textContent, "Withdrawal");
+    assert.equal(state.node("value").textContent, "₹30,000");
     assert.match(state.root.getAttribute("aria-label"), /fictional example/);
+    const expected = [
+        ["****46", "Win", "win", "₹10,000"],
+        ["****35", "Deposit", "deposit", "₹500"],
+        ["****17", "Withdrawal", "withdrawal", "₹30,000"],
+        ["****62", "Win", "win", "₹10,000"],
+        ["****21", "Deposit", "deposit", "₹500"],
+    ];
+    for (const [user, action, kind, amount] of expected) {
+        state.tick(10);
+        assert.equal(state.node("primary").textContent, user);
+        assert.equal(state.node("secondary").textContent, action);
+        assert.equal(state.root.dataset.kind, kind);
+        assert.equal(state.node("value").textContent, amount);
+        assert.equal(state.node("brand").textContent, "DmFirst");
+        assert.equal(state.node("sample").hidden, false, "every example keeps its visible sample label");
+        assert.match(state.root.getAttribute("aria-label"), /fictional example/);
+    }
     state.ticker.destroy();
 });
 
 test("pointer, focus, and visibility pauses preserve independent pause reasons without controls", () => {
     const state = fixture();
+    assert.equal(state.node("sample").hidden, false);
     state.tick(4);
     dispatch(state.root, "pointerenter", {pointerType: "mouse"});
     state.tick(20);
-    assert.equal(state.node("primary").textContent, "Minimum deposit");
+    assert.equal(state.node("primary").textContent, "****21");
     assert.equal(state.frames.size, 0);
     assert.equal(state.root.dataset.phase, "visible");
     dispatch(state.root, "focusin");
@@ -115,12 +174,12 @@ test("pointer, focus, and visibility pauses preserve independent pause reasons w
     state.page.hidden = true;
     dispatch(state.page, "visibilitychange");
     state.tick(30);
-    assert.equal(state.node("primary").textContent, "Minimum deposit");
+    assert.equal(state.node("primary").textContent, "****21");
     assert.equal(state.frames.size, 0);
     state.page.hidden = false;
     dispatch(state.page, "visibilitychange");
     state.tick(8);
-    assert.equal(state.node("primary").textContent, "Registration");
+    assert.equal(state.node("primary").textContent, "****08");
     state.ticker.destroy();
 });
 
@@ -132,11 +191,11 @@ test("focusing the capsule during its empty gap restores a readable card", () =>
     assert.equal(state.root.dataset.phase, "visible");
     assert.equal(state.root.dataset.paused, "true");
     state.tick(20);
-    assert.equal(state.node("primary").textContent, "Minimum deposit");
+    assert.equal(state.node("primary").textContent, "****21");
     dispatch(state.root, "focusout", {relatedTarget: null});
     state.tick(2);
     assert.equal(state.root.dataset.phase, "entering");
-    assert.equal(state.node("primary").textContent, "Registration");
+    assert.equal(state.node("primary").textContent, "****08");
     state.ticker.destroy();
 });
 
@@ -146,7 +205,7 @@ test("reduced motion stays static and cleanup cancels frames and event handlers"
     assert.equal(state.root.dataset.paused, "true");
     assert.equal(state.root.dataset.phase, "visible");
     state.tick(40);
-    assert.equal(state.node("primary").textContent, "Minimum deposit");
+    assert.equal(state.node("primary").textContent, "****21");
     state.motion.matches = false;
     dispatch(state.motion, "change");
     assert.equal(state.frames.size, 1);

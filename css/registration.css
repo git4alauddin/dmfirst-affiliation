@@ -15,7 +15,7 @@
 
 .registration-header {
     display: grid;
-    grid-template-columns: auto minmax(240px, 460px) auto;
+    grid-template-columns: auto minmax(0, max-content) auto;
     align-items: center;
     justify-content: space-between;
     gap: 16px;
@@ -57,27 +57,6 @@
     outline-offset: 4px;
 }
 
-.registration-route {
-    display: flex;
-    justify-content: space-between;
-    gap: 15px;
-    padding: 8px 23px;
-    border-bottom: 1px solid #254c31;
-    color: #749a7e;
-    font-size: 8px;
-    line-height: 1.5;
-}
-
-.registration-route > span:first-child {
-    color: #b0d8bc;
-    letter-spacing: 1px;
-}
-
-.registration-route strong {
-    color: #9dc8aa;
-    font-weight: 400;
-}
-
 .registration-content {
     display: flex;
     flex: 1;
@@ -116,7 +95,6 @@
         grid-column: 1 / -1;
         grid-row: 2;
         justify-self: center;
-        width: min(100%, 460px);
     }
 }
 
@@ -151,9 +129,4 @@
         font-size: 8px;
     }
 
-    .registration-route {
-        padding-inline: 13px;
-        font-size: 6px;
-        gap: 8px;
-    }
 }
