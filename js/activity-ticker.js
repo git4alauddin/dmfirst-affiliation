@@ -12,6 +12,8 @@ export function mountActivityTicker(root, {settings = config, random = Math.rand
     const select = (attribute) => root.querySelector(`[${attribute}]`);
     const primary = select("data-activity-primary");
     const secondary = select("data-activity-secondary");
+    const username = select("data-activity-username");
+    const avatar = select("data-activity-avatar-image");
     const value = select("data-activity-value");
     let index = 0;
     let elapsed = 0;
@@ -23,7 +25,6 @@ export function mountActivityTicker(root, {settings = config, random = Math.rand
 
     root.dataset.mode = "demo";
     root.style.setProperty("--activity-transition-duration", `${fadeMs}ms`);
-    select("data-activity-brand").textContent = "DmFirst";
     select("data-activity-sample").textContent = "Sample";
     select("data-activity-sample").hidden = false;
     select("data-activity-note").textContent = "Demo activity. All displayed users and transactions are fictional preview examples.";
@@ -32,9 +33,11 @@ export function mountActivityTicker(root, {settings = config, random = Math.rand
         const item = items[index];
         primary.textContent = item.primary;
         secondary.textContent = item.secondary;
+        username.textContent = item.username;
+        if (avatar.getAttribute("src") !== item.avatar) avatar.setAttribute("src", item.avatar);
         value.textContent = item.value;
         root.dataset.kind = item.kind;
-        root.setAttribute("aria-label", `Demo activity, fictional example: ${item.primary} ${item.secondary}, ${item.value}`);
+        root.setAttribute("aria-label", `Demo activity, fictional example: ${item.username}, ${item.primary} ${item.secondary}, ${item.value}`);
     }
 
     function running() {
@@ -48,7 +51,7 @@ export function mountActivityTicker(root, {settings = config, random = Math.rand
         if (elapsed >= periodMs) {
             elapsed %= periodMs;
             index = (index + 1) % items.length;
-            if (index === 0) items = getActivityItems({settings, random});
+            if (index === 0) items = getActivityItems({settings, random, previousUsername: items.at(-1).username});
             renderItem();
         }
         root.dataset.phase = elapsed < fadeMs ? "entering"

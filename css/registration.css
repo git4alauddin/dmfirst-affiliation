@@ -64,6 +64,50 @@
     background: #06150b;
 }
 
+.registration-guidance {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 6px 12px;
+    padding: 6px 13px;
+    border-bottom: 1px solid #234c30;
+    color: #b1d8bd;
+    font-size: 10px;
+}
+
+.registration-guidance[hidden], .guidance-dialog-stop[hidden] {
+    display: none;
+}
+
+.registration-guidance button, .guidance-dialog-stop {
+    min-height: 32px;
+    padding: 6px 10px;
+    border: 1px solid #3f754d;
+    border-radius: 4px;
+    background: #0b2915;
+    color: #caffd6;
+    font: inherit;
+    font-size: 10px;
+    cursor: pointer;
+}
+
+.guidance-dialog-stop {
+    display: block;
+    margin: 8px auto;
+}
+
+.registration-guidance button:focus-visible, .guidance-dialog-stop:focus-visible {
+    outline: 2px solid #c9ffd6;
+    outline-offset: 3px;
+}
+
+.registration-guidance button:disabled {
+    opacity: .6;
+    cursor: default;
+}
+
 .registration-content iframe {
     display: block;
     flex: 1;

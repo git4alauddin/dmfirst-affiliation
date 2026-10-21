@@ -13,6 +13,9 @@
     <link rel="stylesheet" href="./css/deposit-widget.css"/>
     <link rel="stylesheet" href="./css/registration.css"/>
     <link rel="stylesheet" href="./css/activity-ticker.css"/>
+    <link rel="preload" as="image" href="./assets/images/avatars/avatar-01.png"/>
+    <link rel="preload" as="image" href="./assets/images/avatars/avatar-02.png"/>
+    <link rel="preload" as="image" href="./assets/images/avatars/avatar-03.png"/>
     <script type="module" src="./js/registration.js"></script>
 </head>
 <body class="registration-page">
@@ -25,13 +28,14 @@
         <span>DM FIRST<span class="wordmark-caption">AFFILIATE ACCESS</span></span>
     </a>
     <section class="activity-ticker" data-activity-ticker data-phase="visible" data-kind="deposit" data-mode="demo"
-             aria-label="Demo activity, fictional example: ****21 Deposit, ₹500" tabindex="0">
+             aria-label="Demo activity, fictional example: Aarav_24, ****21 Deposit, ₹500" tabindex="0">
         <span class="activity-avatar" data-activity-avatar aria-hidden="true">
-            <svg viewBox="0 0 32 32"><use href="./assets/images/icons.svg#profile"/></svg>
+            <img data-activity-avatar-image src="./assets/images/avatars/avatar-01.png" alt="" width="128" height="128"
+                 decoding="async"/>
         </span>
         <div class="activity-copy">
-            <div class="activity-heading"><strong data-activity-secondary>Deposit</strong><span
-                    class="activity-brand" data-activity-brand>DmFirst</span></div>
+            <div class="activity-heading"><strong data-activity-username>Aarav_24</strong></div>
+            <p class="activity-status" data-activity-secondary>Deposit</p>
             <p class="activity-user"><span data-activity-primary>****21</span><span
                     class="activity-sample" data-activity-sample>Sample</span></p>
         </div>
@@ -45,6 +49,12 @@
            rel="noopener noreferrer">Open directly ↗</a>
     </div>
 </header>
+<audio data-registration-audio src="./assets/audio/registration-guide.mp3" preload="auto"></audio>
+<div class="registration-guidance" data-guidance-toolbar hidden>
+    <span>Voice guidance</span>
+    <button type="button" data-guidance-toggle>Play guidance</button>
+    <span class="sr-only" role="status" data-guidance-status></span>
+</div>
 <main class="registration-content">
     <iframe id="dmfirst-frame" title="DmFirst registration"
             src="https://www.dmfirst0.com/#/register?invitationCode=93458117528"
@@ -97,6 +107,7 @@
     </a>
     <p class="deposit-action-note" id="deposit-action-note">Opens wallet recharge on DmFirst.<br/>No payment is made on
         this page.</p>
+    <button class="guidance-dialog-stop" type="button" data-guidance-stop hidden>Stop voice guidance</button>
     <footer class="deposit-footer"><span><span data-deposit-minimum-label>₹500 MINIMUM</span> <span
             aria-hidden="true">/</span> <span
             data-deposit-currency-code>INR</span></span><span>18+ · PLAY RESPONSIBLY</span></footer>

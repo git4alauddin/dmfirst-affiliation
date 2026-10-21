@@ -27,6 +27,16 @@ can still scroll to the lower panels; the three-second sequence is unchanged.
 
 ## Trigger and navigation rules
 
+The wrapper preloads assets/audio/registration-guide.mp3 and stays silent on
+entry. The first ordinary Close or Claim click starts guidance synchronously
+within that user gesture. Later popup actions do not restart it. Manual Play
+guidance also counts as the first playback; explicit replay remains available.
+A compact Voice guidance bar offers play/stop/replay controls. If playback is
+blocked, Play guidance lets the visitor retry. While audio is active, the deposit
+dialog also offers a stop control so it remains reachable during the popup.
+Playback stops on hidden tabs or page exit, with no automatic repeat on return.
+The existing promotional delay and wallet navigation are unchanged.
+
 The popup delay starts when the wrapper's JavaScript initializes and pauses while
 the wrapper is hidden. It does not wait for or infer registration completion.
 Opening Deposit details manually cancels the pending automatic popup so it does
@@ -79,10 +89,10 @@ attention effects do not reopen the popup or change its destination.
 ## Registration top-bar ticker
 
 The header contains a neon-green capsule inspired by the supplied reference,
-with a circular profile illustration, a two-line user/message block, and a
+with a circular profile illustration, a three-line user/message block, and a
 right-aligned highlighted value. Category badges, separate category icons, and
 section headings are omitted. All three activity types use the same green styling.
-The small brand badge reads DmFirst. The capsule sizes to its content with
+The capsule sizes to its content with
 tighter gaps and padding, rather than stretching to a 460-pixel width.
 The entire capsule slides in from the right and fades into view, stays visible,
 then moves left and fades away before the next capsule appears.
@@ -91,10 +101,17 @@ a 360 ms entrance, a readable hold, a 360 ms exit, and a 240 ms empty interval.
 Its header space stays reserved throughout so the iframe does not jump.
 
 All visits rotate Deposit, Withdrawal, and Win entries, with masked fictional
-user IDs and varied amounts. The category appears in bold above the smaller masked user identifier, with
+user IDs and varied amounts. The fictional username occupies the bold top
+row, the category appears in the middle, and the smaller masked UID and
+Sample label appear on the bottom row, with
 only the currency amount on the right. A small Sample
 label sits beside the identifier; accessible text also identifies the examples as
-fictional. The profile avatar is an original SVG illustration.
+fictional. Three original generated 3D cartoon portraits appear as circular
+avatars. They are stored as 128-pixel PNGs under assets/images/avatars/ and
+preloaded by the wrapper, with no external image requests.
+There are 36 fictional Indian-style usernames. Profiles are shuffled each loop,
+each username retains its masked UID and avatar, and consecutive notifications never repeat
+the same username, including at loop boundaries.
 Sample amounts are randomized in 500-rupee steps: deposits range from 500 to
 2,000 INR, withdrawals from 30,000 to 70,000 INR, and wins from 10,000 to
 30,000 INR, including both endpoints.
