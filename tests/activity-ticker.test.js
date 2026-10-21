@@ -77,15 +77,15 @@ test("activity uses deposit, withdrawal, and win with masked IDs and currency am
     assert.ok(items.every((item) => /^₹[\d,]+$/.test(item.value)));
 });
 
-test("36 shuffled fictional usernames retain their masked IDs and avatars without adjacent repeats", () => {
+test("20 shuffled fictional usernames retain their masked IDs and avatars without adjacent repeats", () => {
     const first = getActivityItems({random: () => 0});
     const second = getActivityItems({random: () => 0.999999, previousUsername: first.at(-1).username});
-    assert.equal(first.length, 36);
-    assert.equal(new Set(first.map(item => item.username)).size, 36);
+    assert.equal(first.length, 20);
+    assert.equal(new Set(first.map(item => item.username)).size, 20);
     const identifiers = new Map(first.map(item => [item.username, item.primary]));
     const avatars = new Map(first.map(item => [item.username, item.avatar]));
-    assert.equal(new Set(avatars.values()).size, 3);
-    assert.equal(new Set(identifiers.values()).size, 36);
+    assert.equal(new Set(avatars.values()).size, 9);
+    assert.equal(new Set(identifiers.values()).size, 20);
     assert.notDeepEqual(first.map(item => item.username), second.map(item => item.username));
     for (const item of second) {
         assert.equal(item.primary, identifiers.get(item.username));
@@ -97,6 +97,25 @@ test("36 shuffled fictional usernames retain their masked IDs and avatars withou
     }
     const boundary = getActivityItems({random: () => 0, previousUsername: first[0].username});
     assert.notEqual(boundary[0].username, first[0].username, "a repeat at a loop boundary is skipped");
+});
+
+test("profiles keep the 16 male / 4 female ratio and use the supplied matching DPs", async () => {
+    const items = getActivityItems();
+    assert.equal(items.filter(item => item.gender === "male").length, 16);
+    assert.equal(items.filter(item => item.gender === "female").length, 4);
+    const femaleFiles = new Set(["img_4.png", "img_6.png", "img_8.png"]);
+    const files = new Set();
+    for (const item of items) {
+        const filename = item.avatar.split("/").at(-1);
+        assert.match(filename, /^img(?:_[1-8])?\.png$/);
+        assert.equal(femaleFiles.has(filename), item.gender === "female", item.username);
+        files.add(item.avatar);
+    }
+    for (const path of files) {
+        const bytes = await readFile(new URL(`../${path}`, import.meta.url));
+        assert.ok(bytes.length > 0, `${path} exists`);
+        assert.ok(html.includes(`rel="preload" as="image" href="${path}"`), `${path} is preloaded`);
+    }
 });
 
 test("sample amounts include both range endpoints and only use 500-rupee steps", () => {

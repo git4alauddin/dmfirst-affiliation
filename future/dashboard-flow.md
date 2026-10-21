@@ -106,10 +106,12 @@ row, the category appears in the middle, and the smaller masked UID and
 Sample label appear on the bottom row, with
 only the currency amount on the right. A small Sample
 label sits beside the identifier; accessible text also identifies the examples as
-fictional. Three original generated 3D cartoon portraits appear as circular
-avatars. They are stored as 128-pixel PNGs under assets/images/avatars/ and
-preloaded by the wrapper, with no external image requests.
-There are 36 fictional Indian-style usernames. Profiles are shuffled each loop,
+fictional. Nine user-supplied profile pictures appear as circular avatars,
+using img.png and img_1.png through img_8.png under assets/images/avatars/.
+They replace the generated demo portraits and are preloaded by the wrapper,
+with no external image requests. The duplicate img_9.png is not assigned.
+There are 20 fictional Indian-style usernames: 16 male and 4 female profiles,
+with explicitly assigned matching DPs. Profiles are shuffled each loop,
 each username retains its masked UID and avatar, and consecutive notifications never repeat
 the same username, including at loop boundaries.
 Sample amounts are randomized in 500-rupee steps: deposits range from 500 to
