@@ -1,3 +1,25 @@
+[data-draggable-floating] {
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+}
+
+[data-draggable-floating] > * {
+    pointer-events: none;
+}
+
+[data-draggable-floating][data-drag-pressed] {
+    animation-play-state: paused;
+}
+
+[data-draggable-floating][data-dragging] {
+    z-index: 11;
+    animation: none;
+    transform: none;
+    cursor: grabbing;
+}
+
 .deposit-widget {
     position: fixed;
     right: max(24px, env(safe-area-inset-right));

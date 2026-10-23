@@ -8,7 +8,7 @@
     "start": "node tools/serve.mjs",
     "build": "node tools/build.mjs",
     "test": "node --test",
-    "check": "node --check js/main.js && node --check js/animations.js && node --check js/config.js && node --check js/registration.js && node --check js/registration-audio.js && node --check js/registration-flow.js && node --check js/prediction-config.js && node --check js/prediction-widget.js && node --check js/prediction-reels.js && node --check js/activity-ticker.js && node --check js/activity-content.js && node --check js/deposit-widget.js && node --check js/deposit-prompt.js && node --check js/deposit-preview.js && node --check js/iframe-experiment.js && node --check tools/serve.mjs && node --check tools/build.mjs"
+    "check": "node --check js/main.js && node --check js/animations.js && node --check js/config.js && node --check js/registration.js && node --check js/registration-audio.js && node --check js/registration-flow.js && node --check js/prediction-config.js && node --check js/prediction-widget.js && node --check js/prediction-reels.js && node --check js/activity-ticker.js && node --check js/activity-content.js && node --check js/deposit-widget.js && node --check js/draggable-widget.js && node --check js/deposit-prompt.js && node --check js/deposit-preview.js && node --check js/iframe-experiment.js && node --check tools/serve.mjs && node --check tools/build.mjs"
   },
   "engines": {
     "node": ">=20"
