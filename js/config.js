@@ -6,7 +6,7 @@ export const config = Object.freeze({
     depositUrl: "https://www.dmfirst0.com/#/wallet/Recharge",
     popupDelayMs: 1000,
     activityIntervalMs: 4000,
-    minimumDeposit: 500,
+    minimumDeposit: 1000,
     depositCurrency: "INR",
     copyCodeDemo: Object.freeze({
         heading: "Already deposited?",
