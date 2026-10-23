@@ -23,23 +23,44 @@ export function mountRegistrationFlow(page, settings = config, schedule = schedu
     const prompt = mountDepositPrompt(dialog, settings);
     const floating = mountDepositWidget(dialog, widget, prompt);
     let destroyed = false;
+    let waitingDialog;
+
+    function showPromotion() {
+        if (destroyed) return;
+        const activeDialog = page.querySelector("dialog[open]");
+        if (activeDialog && activeDialog !== dialog) {
+            waitingDialog = activeDialog;
+            waitingDialog.addEventListener("close", resumePromotion, {once: true});
+            return;
+        }
+        floating.show();
+    }
+
+    function resumePromotion() {
+        waitingDialog = null;
+        showPromotion();
+    }
 
     direct.href = settings.registerUrl;
     if (frame.getAttribute("src") !== settings.registerUrl) frame.src = settings.registerUrl;
     // A marketing delay, not an indication that registration succeeded.
-    const cancelPromotion = schedule(settings.popupDelayMs, () => {
-        if (!destroyed) floating.show();
-    });
+    const cancelPromotion = schedule(settings.popupDelayMs, showPromotion);
+
+    function cancelPendingPromotion() {
+        cancelPromotion();
+        waitingDialog?.removeEventListener("close", resumePromotion);
+        waitingDialog = null;
+    }
 
     function showDetails() {
-        cancelPromotion();
+        cancelPendingPromotion();
         floating.show();
     }
 
     function claimClicked(event) {
         if (event.defaultPrevented || event.button > 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
         event.preventDefault();
-        cancelPromotion();
+        cancelPendingPromotion();
         prompt.close();
         frame.src = settings.depositUrl;
         frame.title = "DmFirst wallet recharge";
@@ -51,7 +72,7 @@ export function mountRegistrationFlow(page, settings = config, schedule = schedu
     return {
         destroy() {
             destroyed = true;
-            cancelPromotion();
+            cancelPendingPromotion();
             details.removeEventListener("click", showDetails);
             claim.removeEventListener("click", claimClicked);
             floating.destroy();

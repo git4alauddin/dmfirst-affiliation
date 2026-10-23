@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="./css/deposit-widget.css"/>
     <link rel="stylesheet" href="./css/registration.css"/>
     <link rel="stylesheet" href="./css/activity-ticker.css"/>
+    <link rel="stylesheet" href="./css/prediction-widget.css"/>
     <link rel="preload" as="image" href="./assets/images/avatars/img.png"/>
     <link rel="preload" as="image" href="./assets/images/avatars/img_1.png"/>
     <link rel="preload" as="image" href="./assets/images/avatars/img_2.png"/>
@@ -69,6 +70,15 @@
 <button class="deposit-widget" type="button" data-deposit-widget hidden aria-label="Reopen minimum deposit details"
         aria-controls="deposit-dialog" aria-haspopup="dialog"><span aria-hidden="true">₹</span><small>DETAILS</small>
 </button>
+<button class="prediction-widget" type="button" data-prediction-widget hidden aria-label="Open predictions"
+        aria-controls="prediction-dialog" aria-haspopup="dialog" aria-expanded="false">
+    <svg viewBox="0 0 28 28" aria-hidden="true">
+        <circle cx="14" cy="14" r="8"/>
+        <circle cx="14" cy="14" r="2"/>
+        <path d="M14 2v5m0 14v5M2 14h5m14 0h5"/>
+    </svg>
+    <small data-prediction-text="widgetLabel">PREDICT</small>
+</button>
 <noscript><p class="registration-noscript">Minimum deposit: ₹500 (INR). <a
         href="https://www.dmfirst0.com/#/wallet/Recharge">Claim — open DmFirst wallet recharge ↗</a></p></noscript>
 <dialog class="deposit-dialog" id="deposit-dialog" aria-labelledby="deposit-title"
@@ -114,9 +124,115 @@
     <p class="deposit-action-note" id="deposit-action-note">Opens wallet recharge on DmFirst.<br/>No payment is made on
         this page.</p>
     <button class="guidance-dialog-stop" type="button" data-guidance-stop hidden>Stop voice guidance</button>
+    <section class="deposit-copy-demo" aria-label="Copy code demo" data-copy-code-section hidden>
+        <div class="deposit-copy-caption"><strong data-copy-code-heading>Already deposited?</strong><span data-copy-code-caption>Visual demo</span></div>
+        <button type="button" class="deposit-copy-button" data-copy-code-demo>
+            <span data-copy-code-icon aria-hidden="true"><svg viewBox="0 0 20 20"><rect x="7" y="7" width="10" height="10" rx="2"/><path d="M12 4V3H3v9h1"/></svg></span>
+            <span data-copy-code-check aria-hidden="true" hidden><svg viewBox="0 0 20 20"><path d="m4 10 4 4 8-8"/></svg></span>
+            <span role="status" aria-live="polite" data-copy-code-label>Copy Code</span>
+        </button>
+    </section>
     <footer class="deposit-footer"><span><span data-deposit-minimum-label>₹500 MINIMUM</span> <span
             aria-hidden="true">/</span> <span
             data-deposit-currency-code>INR</span></span><span>18+ · PLAY RESPONSIBLY</span></footer>
+</dialog>
+<dialog class="deposit-dialog prediction-dialog" id="prediction-dialog" aria-labelledby="prediction-access-title"
+        aria-describedby="prediction-access-help">
+    <div class="deposit-corners" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+    <header class="deposit-header">
+        <span><i></i> <span data-prediction-text="brand">DM FIRST</span> <span class="deposit-header-slash">/</span> <span id="prediction-preview-note" data-prediction-text="modeLabel">SIMULATION</span></span>
+        <button class="deposit-close" type="button" aria-label="Close predictions" data-dismiss-prediction>
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 5 10 10M15 5 5 15"/></svg>
+        </button>
+    </header>
+    <section class="prediction-access" data-prediction-access>
+        <div class="prediction-access-art" aria-hidden="true">
+            <svg viewBox="0 0 80 80">
+                <circle class="prediction-access-orbit" cx="40" cy="40" r="35"/>
+                <circle class="prediction-access-dot" cx="40" cy="5" r="2.5"/>
+                <path class="prediction-access-shackle" d="M28 34v-9a12 12 0 0 1 24 0v9"/>
+                <rect x="22" y="33" width="36" height="29" rx="5"/>
+                <path d="M40 44v8"/>
+            </svg>
+        </div>
+        <h2 class="prediction-title" id="prediction-access-title" tabindex="-1" data-prediction-access-title>Enter access code</h2>
+        <p class="prediction-access-help" id="prediction-access-help" role="status" data-prediction-access-help>Enter your code to open the prediction preview.</p>
+        <form class="prediction-code-form" data-prediction-code-form novalidate>
+            <label for="prediction-code" data-prediction-text="codeLabel">Access code</label>
+            <input id="prediction-code" name="access-code" type="password" required maxlength="128" autocomplete="off"
+                   autocapitalize="characters" spellcheck="false" aria-describedby="prediction-code-error"
+                   aria-invalid="false" data-prediction-code/>
+            <p class="prediction-code-error" id="prediction-code-error" role="alert" data-prediction-code-error hidden></p>
+            <aside class="prediction-admin-contact" data-prediction-admin-contact aria-labelledby="prediction-admin-title" hidden>
+                <h3 id="prediction-admin-title" data-prediction-text="adminTitle">Contact Admin</h3>
+                <div class="prediction-admin-row">
+                    <span class="prediction-admin-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><path d="m20 4-3 16-5-4-3 3v-6L20 4 4 11l5 2"/></svg>
+                    </span>
+                    <div class="prediction-admin-details">
+                        <span class="prediction-admin-caption" data-prediction-text="adminChannel">Telegram DM</span>
+                        <span data-prediction-admin-text>Telegram contact coming soon.</span>
+                        <a data-prediction-admin-link target="_blank" rel="noopener noreferrer" hidden>Message admin</a>
+                    </div>
+                </div>
+            </aside>
+            <button class="prediction-trigger prediction-unlock" type="submit" data-prediction-unlock>
+                <span class="prediction-unlock-icon" data-prediction-unlock-icon aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V6a4 4 0 0 1 8 0M12 14v3"/></svg>
+                </span>
+                <span class="prediction-unlock-icon" data-prediction-lock-icon aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V6a4 4 0 0 1 8 0v4M12 14v3"/></svg>
+                </span>
+                <span data-prediction-unlock-label>Unlock</span>
+            </button>
+        </form>
+        <div class="prediction-unlock-progress" data-prediction-unlock-progress hidden>
+            <p><span data-prediction-progress-label>Opening preview</span><strong data-prediction-percent>0%</strong></p>
+            <div class="prediction-progressbar" role="progressbar" aria-label="Opening prediction preview"
+                 aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" data-prediction-progressbar><span></span></div>
+        </div>
+    </section>
+    <div data-prediction-preview hidden>
+    <h2 class="prediction-title" id="prediction-title" tabindex="-1" data-prediction-heading>Number game</h2>
+    <button class="prediction-trigger" type="button" data-predict disabled>Predict</button>
+    <div class="prediction-content" data-prediction-content aria-busy="false">
+        <section class="prediction-result prediction-result-numbers" aria-labelledby="prediction-numbers-label">
+            <h3 id="prediction-numbers-label" data-prediction-text="numbersLabel">Numbers</h3>
+            <div class="prediction-number-slots">
+                <div class="prediction-number-slot">
+                    <div class="prediction-reel prediction-reel-number" data-prediction-reel="number-a" data-prediction-number role="img" aria-label="Awaiting selection">
+                        <div class="prediction-reel-track" data-reel-track><div class="prediction-reel-cell prediction-reel-placeholder">—</div></div>
+                    </div>
+                </div>
+                <div class="prediction-number-slot">
+                    <div class="prediction-reel prediction-reel-number" data-prediction-reel="number-b" data-prediction-number role="img" aria-label="Awaiting selection">
+                        <div class="prediction-reel-track" data-reel-track><div class="prediction-reel-cell prediction-reel-placeholder">—</div></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="prediction-result" aria-labelledby="prediction-size-label">
+            <h3 id="prediction-size-label" data-prediction-text="sizeLabel">Big / Small</h3>
+            <div class="prediction-reel" data-prediction-reel="size" role="img" aria-label="Awaiting selection">
+                <div class="prediction-reel-track" data-reel-track><div class="prediction-reel-cell prediction-reel-placeholder">—</div></div>
+            </div>
+        </section>
+        <section class="prediction-result" aria-labelledby="prediction-color-label">
+            <h3 id="prediction-color-label" data-prediction-text="colorLabel">Color</h3>
+            <div class="prediction-reel" data-prediction-reel="color" role="img" aria-label="Awaiting selection">
+                <div class="prediction-reel-track" data-reel-track><div class="prediction-reel-cell prediction-reel-placeholder">—</div></div>
+            </div>
+        </section>
+    </div>
+    <div class="prediction-ready-banner" data-prediction-ready-banner hidden>
+        <span class="prediction-ready-mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="m6 12 4 4 8-8"/></svg>
+        </span>
+        <strong data-prediction-ready-text>Selection Ready</strong>
+    </div>
+    <p class="prediction-spin-status" role="status" data-prediction-spin-status>Select Predict to spin a preset combination.</p>
+    <p class="prediction-disclosure" data-prediction-text="disclosure">Preset simulation · No live game data</p>
+    </div>
 </dialog>
 </body>
 </html>

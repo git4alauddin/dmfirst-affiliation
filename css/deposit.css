@@ -440,6 +440,106 @@
     line-height: 1.8;
 }
 
+.deposit-copy-demo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin: 0 0 16px;
+    padding: 10px 11px;
+    border: 1px solid #345e3e;
+    border-radius: 5px;
+    background: #0b2212;
+    text-align: left;
+}
+
+.deposit-copy-caption {
+    display: grid;
+    gap: 5px;
+}
+
+.deposit-copy-demo[hidden] {
+    display: none;
+}
+
+.deposit-copy-caption strong {
+    color: #c0dfc8;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.deposit-copy-caption span {
+    color: #89ac93;
+    font-size: 8px;
+}
+
+.deposit-copy-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-width: 116px;
+    min-height: 40px;
+    padding: 8px;
+    border: 1px solid #6da97a;
+    border-radius: 4px;
+    background: #173a21;
+    color: #c9ffd3;
+    font-family: inherit;
+    font-size: 10px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.deposit-copy-button:hover {
+    border-color: #b3fbc3;
+}
+
+.deposit-copy-button:focus-visible {
+    outline: 2px solid #c9ffd3;
+    outline-offset: 3px;
+}
+
+.deposit-copy-button:disabled {
+    cursor: wait;
+}
+
+.deposit-copy-button svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.deposit-copy-button [data-copy-code-icon],
+.deposit-copy-button [data-copy-code-check] {
+    display: inline-flex;
+}
+
+.deposit-copy-button [hidden] {
+    display: none;
+}
+
+.deposit-copy-button:disabled svg {
+    animation: deposit-copy-pulse .6s ease-in-out both;
+}
+
+.deposit-copy-button [data-copy-code-check]:not([hidden]) {
+    animation: deposit-copy-check .3s ease-out both;
+}
+
+@keyframes deposit-copy-pulse {
+    50% { opacity: .4; transform: translateY(-3px); }
+}
+
+@keyframes deposit-copy-check {
+    from { opacity: 0; transform: scale(.5); }
+    to { opacity: 1; transform: scale(1); }
+}
+
 .deposit-footer {
     display: flex;
     flex-wrap: wrap;
@@ -574,6 +674,11 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+    .deposit-copy-button:disabled svg,
+    .deposit-copy-button [data-copy-code-check]:not([hidden]) {
+        animation: none;
+    }
+
     .deposit-dialog[open], .deposit-orbit-arc {
         animation: none;
     }

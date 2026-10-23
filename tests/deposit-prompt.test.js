@@ -109,3 +109,73 @@ test("the popup amount comes from configuration and invalid amounts are rejected
     assert.throws(() => mountDepositPrompt(dialog, {...config, minimumDeposit: null}), RangeError);
     assert.throws(() => mountDepositPrompt(dialog, {...config, minimumDeposit: -500}), RangeError);
 });
+
+test("the copy demo animates once per click cycle and closing cancels pending feedback", (context) => {
+    context.mock.timers.enable({apis: ["setTimeout"]});
+    const dialog = dialogFixture();
+    const prompt = mountDepositPrompt(dialog);
+    const button = dialog.querySelector("[data-copy-code-demo]");
+    const label = dialog.querySelector("[data-copy-code-label]");
+    const check = dialog.querySelector("[data-copy-code-check]");
+    prompt.show();
+    dialog.querySelector("[data-deposit-claim]").dispatchEvent(new Event("click"));
+    prompt.close();
+    prompt.show();
+    button.dispatchEvent(new Event("click"));
+    assert.equal(button.disabled, true);
+    assert.equal(label.textContent, config.copyCodeDemo.loadingText);
+    context.mock.timers.tick(300);
+    button.dispatchEvent(new Event("click"));
+    context.mock.timers.tick(300);
+    assert.equal(label.textContent, config.copyCodeDemo.completeText);
+    assert.equal(check.hidden, false);
+    assert.equal(dialog.open, true);
+    assert.equal(button.disabled, false);
+    context.mock.timers.tick(1800);
+    assert.equal(label.textContent, config.copyCodeDemo.buttonText);
+    button.dispatchEvent(new Event("click"));
+    prompt.close();
+    prompt.show();
+    context.mock.timers.tick(2400);
+    assert.equal(label.textContent, config.copyCodeDemo.buttonText);
+    assert.equal(check.hidden, true);
+    button.dispatchEvent(new Event("click"));
+    dialog.close();
+    dialog.dispatchEvent(new Event("close"));
+    context.mock.timers.tick(600);
+    assert.equal(label.textContent, config.copyCodeDemo.buttonText);
+    prompt.destroy();
+    prompt.show();
+    button.dispatchEvent(new Event("click"));
+    assert.equal(label.textContent, config.copyCodeDemo.buttonText);
+});
+
+test("configured copy section text is used at mount, during animation, and after reset", (context) => {
+    context.mock.timers.enable({apis: ["setTimeout"]});
+    const dialog = dialogFixture();
+    const copyCodeDemo = {
+        heading: "Deposit already made?",
+        caption: "Preview only",
+        buttonText: "Try copy",
+        loadingText: "Working…",
+        completeText: "Preview finished",
+    };
+    const prompt = mountDepositPrompt(dialog, {...config, minimumDeposit: 1500, copyCodeDemo});
+    const label = dialog.querySelector("[data-copy-code-label]");
+    assert.equal(dialog.querySelector("[data-copy-code-heading]").textContent, copyCodeDemo.heading);
+    assert.equal(dialog.querySelector("[data-copy-code-caption]").textContent, copyCodeDemo.caption);
+    assert.equal(label.textContent, copyCodeDemo.buttonText);
+    for (const amount of dialog.querySelectorAll("[data-deposit-amount]")) assert.equal(amount.textContent, "₹1,500");
+    assert.equal(dialog.querySelector("[data-deposit-minimum-label]").textContent, "₹1,500 MINIMUM");
+    prompt.show();
+    dialog.querySelector("[data-deposit-claim]").dispatchEvent(new Event("click"));
+    prompt.close();
+    prompt.show();
+    dialog.querySelector("[data-copy-code-demo]").dispatchEvent(new Event("click"));
+    assert.equal(label.textContent, copyCodeDemo.loadingText);
+    context.mock.timers.tick(600);
+    assert.equal(label.textContent, copyCodeDemo.completeText);
+    context.mock.timers.tick(1800);
+    assert.equal(label.textContent, copyCodeDemo.buttonText);
+    prompt.destroy();
+});

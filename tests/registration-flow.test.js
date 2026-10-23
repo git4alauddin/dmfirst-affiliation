@@ -50,6 +50,7 @@ function fixture() {
     }
 
     function query(nodes, selector) {
+        if (selector === "dialog[open]") return nodes.filter(node => node.open);
         if (selector.startsWith("#")) return nodes.filter((node) => node.getAttribute("id") === selector.slice(1));
         const attribute = selector.slice(1, -1);
         return nodes.filter((node) => new RegExp(`(?:^|\\s)${attribute}(?:\\s|=|$)`).test(node.attributes));
@@ -141,6 +142,38 @@ test("modified Claim clicks preserve the browser's link behavior", () => {
     state.flow.destroy();
 });
 
+test("copy section stays hidden until Claim, then appears on later popup visits", () => {
+    const state = fixture();
+    const section = state.dialog.querySelector("[data-copy-code-section]");
+    assert.equal(section.hidden, true);
+    state.firePromotion();
+    assert.equal(section.hidden, true);
+    click(state.dialog.querySelector("[data-dismiss-deposit]"));
+    click(state.widget);
+    assert.equal(section.hidden, true, "closing and reopening alone must not unlock it");
+    const prevented = new Event("click", {cancelable: true});
+    prevented.preventDefault();
+    state.claim.dispatchEvent(prevented);
+    click(state.claim, {ctrlKey: true});
+    state.dialog.close();
+    click(state.widget);
+    assert.equal(section.hidden, true, "cancelled and modified clicks must not unlock it");
+    click(state.claim);
+    assert.equal(state.dialog.open, false);
+    assert.equal(section.hidden, true, "visibility changes only on the next visit");
+    click(state.widget);
+    assert.equal(section.hidden, false);
+    assert.equal(state.frame.src, config.depositUrl);
+    state.dialog.close();
+    click(state.widget);
+    assert.equal(section.hidden, false);
+    state.flow.destroy();
+    const fresh = fixture();
+    fresh.firePromotion();
+    assert.equal(fresh.dialog.querySelector("[data-copy-code-section]").hidden, true);
+    fresh.flow.destroy();
+});
+
 test("manual opening cancels the delayed popup and cleanup releases controls", () => {
     const state = fixture();
     click(state.show);
@@ -153,4 +186,23 @@ test("manual opening cancels the delayed popup and cleanup releases controls", (
     click(state.show);
     click(state.widget);
     assert.equal(state.dialog.open, false);
+});
+
+test("automatic deposit promotion waits for another dialog and cleanup cancels the wait", () => {
+    const state = fixture();
+    const other = state.page.querySelector("#prediction-dialog");
+    other.showModal();
+    state.firePromotion();
+    assert.equal(state.dialog.open, false, "the two modals must not stack");
+    other.close();
+    assert.equal(state.dialog.open, true, "promotion resumes after dismissal");
+    state.flow.destroy();
+
+    const cancelled = fixture();
+    const waiting = cancelled.page.querySelector("#prediction-dialog");
+    waiting.showModal();
+    cancelled.firePromotion();
+    cancelled.flow.destroy();
+    waiting.close();
+    assert.equal(cancelled.dialog.open, false, "teardown removes the deferred promotion");
 });

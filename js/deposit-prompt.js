@@ -23,8 +23,58 @@ export function mountDepositPrompt(dialog, settings = config) {
     const claim = dialog.querySelector("[data-deposit-claim]");
     claim.href = settings.depositUrl;
     const dismiss = dialog.querySelector("[data-dismiss-deposit]");
+    const copySection = dialog.querySelector("[data-copy-code-section]");
+    const copyButton = dialog.querySelector("[data-copy-code-demo]");
+    const copyLabel = dialog.querySelector("[data-copy-code-label]");
+    const copyIcon = dialog.querySelector("[data-copy-code-icon]");
+    const copyCheck = dialog.querySelector("[data-copy-code-check]");
+    const copyText = settings.copyCodeDemo ?? config.copyCodeDemo;
+    if (copyButton) {
+        dialog.querySelector("[data-copy-code-heading]").textContent = copyText.heading;
+        dialog.querySelector("[data-copy-code-caption]").textContent = copyText.caption;
+    }
+    let copyTimer;
+    let hasClaimed = false;
+    if (copySection) copySection.hidden = true;
+
+    function recordClaim(event) {
+        if (!dialog.open || event.defaultPrevented || event.button > 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+        // This records a Claim click only, not a completed deposit.
+        hasClaimed = true;
+    }
+
+    function resetCopyDemo() {
+        clearTimeout(copyTimer);
+        copyTimer = undefined;
+        if (!copyButton) return;
+        copyButton.disabled = false;
+        copyLabel.textContent = copyText.buttonText;
+        copyIcon.hidden = false;
+        copyCheck.hidden = true;
+    }
+
+    function playCopyDemo() {
+        if (!dialog.open || copySection?.hidden || copyTimer !== undefined) return;
+        copyButton.disabled = true;
+        copyLabel.textContent = copyText.loadingText;
+        copyTimer = setTimeout(() => {
+            copyLabel.textContent = copyText.completeText;
+            copyIcon.hidden = true;
+            copyCheck.hidden = false;
+            copyButton.disabled = false;
+            copyTimer = setTimeout(resetCopyDemo, 1800);
+        }, 600);
+    }
+
+    function onDialogClose() {
+        // Ignore a queued close event if the dialog has already reopened.
+        if (!dialog.open) resetCopyDemo();
+    }
+
+    resetCopyDemo();
 
     function close() {
+        resetCopyDemo();
         if (dialog.open) dialog.close();
     }
 
@@ -36,10 +86,15 @@ export function mountDepositPrompt(dialog, settings = config) {
 
     dismiss.addEventListener("click", close);
     dialog.addEventListener("click", backdropClick);
+    dialog.addEventListener("close", onDialogClose);
+    copyButton?.addEventListener("click", playCopyDemo);
+    claim.addEventListener("click", recordClaim);
 
     return {
         show() {
             if (!dialog.open) {
+                resetCopyDemo();
+                if (copySection) copySection.hidden = !hasClaimed;
                 dialog.showModal();
                 dialog.querySelector("[data-deposit-heading]").focus();
             }
@@ -49,6 +104,9 @@ export function mountDepositPrompt(dialog, settings = config) {
             close();
             dismiss.removeEventListener("click", close);
             dialog.removeEventListener("click", backdropClick);
+            dialog.removeEventListener("close", onDialogClose);
+            copyButton?.removeEventListener("click", playCopyDemo);
+            claim.removeEventListener("click", recordClaim);
         },
     };
 }

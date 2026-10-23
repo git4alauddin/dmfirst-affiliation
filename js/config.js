@@ -8,6 +8,13 @@ export const config = Object.freeze({
     activityIntervalMs: 4000,
     minimumDeposit: 500,
     depositCurrency: "INR",
+    copyCodeDemo: Object.freeze({
+        heading: "Already deposited?",
+        caption: "Claim now",
+        buttonText: "Copy Code",
+        loadingText: "Copying…",
+        completeText: "Text copied",
+    }),
     sequence: Object.freeze({
         fillMs: 1800,
         holdMs: 300,
